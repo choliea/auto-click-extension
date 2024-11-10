@@ -1,0 +1,22 @@
+{
+    "manifest_version": 2,
+    "name": "Auto Click Extension",
+    "version": "1.0",
+    "description": "Auto click at specific time",
+    "permissions": [
+        "activeTab",
+        "tabs",
+        "storage",
+        "https://www.ys-vertium-friends.co.kr/*"
+    ],
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
+    },
+    "content_scripts": [
+        {
+            "matches": ["https://www.ys-vertium-friends.co.kr/*"],
+            "js": ["content.js"]
+        }
+    ]
+}

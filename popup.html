@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            width: 300px;
+            padding: 10px;
+        }
+
+        .status {
+            margin: 10px 0;
+            padding: 5px;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h3>자동 클릭 설정</h3>
+    <div>
+        <label>목표 시간: </label>
+        <input type="time" id="targetTime" value="14:00">
+    </div>
+    <div class="status" id="status"></div>
+    <button id="startBtn">시작</button>
+    <button id="stopBtn">중지</button>
+    <script src="popup.js"></script>
+</body>
+
+</html>
