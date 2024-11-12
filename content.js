@@ -1,7 +1,7 @@
 let serverTimeOffset = 0;
 
 const CONFIG = {
-    TARGET_URL: 'https://www.ys-vertium-friends.co.kr/newpage/newpage.php?f_id=re_appli_typeA',// 'https://www.ys-vertium-friends.co.kr/live/contract.php?page_step=3&struct_type=48',
+    TARGET_URL: 'https://www.ys-vertium-friends.co.kr/live/contract.php?page_step=1&struct_type=48',
     TARGET_HOUR: 14,
     TARGET_MINUTE: 0,
     TARGET_SECOND: 0
