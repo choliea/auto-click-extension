@@ -1,9 +1,9 @@
 let serverTimeOffset = 0;
 
 const CONFIG = {
-    TARGET_URL: 'https://www.ys-vertium-friends.co.kr/live/contract.php?page_step=1&struct_type=48',
+    TARGET_URL: 'https://www.ys-vertium-friends.co.kr/newpage/newpage.php?f_id=re_appli_typeA',// 'https://www.ys-vertium-friends.co.kr/live/contract.php?page_step=3&struct_type=48',
     TARGET_HOUR: 14,
-    TARGET_MINUTE: 56,
+    TARGET_MINUTE: 0,
     TARGET_SECOND: 0
 };
 
@@ -33,37 +33,27 @@ function getCurrentServerTime() {
 
 async function autoClick() {
     try {
-        // struct_idx 라디오 버튼이 있는 경우
+        // struct_idx 라디오 버튼 처리
         const radioButtons = document.querySelectorAll('input[name="struct_idx"]');
         if (radioButtons.length > 0) {
-            radioButtons[1].click();
-            console.log('라디오 버튼 선택됨');
-            await new Promise(resolve => setTimeout(resolve, 100));
+            // 라디오 버튼이 2개 이상이면 두 번째 것을, 아니면 첫 번째 것을 선택
+            const buttonToClick = radioButtons.length >= 2 ? radioButtons[1] : radioButtons[0];
+            buttonToClick.click();
+            console.log(`라디오 버튼 선택됨 (${radioButtons.length}개 중 ${buttonToClick === radioButtons[1] ? '2' : '1'}번째)`);
 
-            // go_next 함수 호출
-            if (typeof go_next === 'function') {
-                go_next();
-                console.log('go_next 함수 호출됨');
-            }else{
-                const nextButton = Array.from(document.getElementsByTagName('a'))
-                    .find(el => el.textContent.includes('다음'));
-                if (nextButton) {
-                    nextButton.click();
-                    console.log('다음 버튼 클릭됨');
-                    return true;
-                }
-            }
-            return true;
+            // 라디오 버튼 클릭 후 약간의 지연
+            await new Promise(resolve => setTimeout(resolve, 50));
         }
 
-        // 체크박스가 있는 경우
+        // 체크박스가 있는 경우 (3번째 페이지)
         const checkbox = document.querySelector('#chkAll');
         if (checkbox) {
             checkbox.click();
-            console.log('체크박스 선택됨');
-            await new Promise(resolve => setTimeout(resolve, 100));
+            console.log('체크박스 모두 선택됨');
+            await new Promise(resolve => setTimeout(resolve, 50));
         }
 
+        // 다음 버튼 클릭 (모든 페이지 공통)
         const nextButton = Array.from(document.getElementsByTagName('a'))
             .find(el => el.textContent.includes('다음'));
         if (nextButton) {
@@ -71,7 +61,8 @@ async function autoClick() {
             console.log('다음 버튼 클릭됨');
             return true;
         }
-        console.log('클릭할 요소를 찾지 못함');
+
+        console.log('다음 버튼을 찾지 못함');
         return false;
     } catch (error) {
         console.error('클릭 실패:', error);
@@ -79,16 +70,18 @@ async function autoClick() {
     }
 }
 
+
 function checkAndExecute() {
     const now = getCurrentServerTime();
     if (now.getHours() === CONFIG.TARGET_HOUR &&
         now.getMinutes() === CONFIG.TARGET_MINUTE &&
         now.getSeconds() === CONFIG.TARGET_SECOND) {
 
-        if (window.location.href !== CONFIG.TARGET_URL) {
-            window.location.href = CONFIG.TARGET_URL;
+        // 현재 URL이 타겟 URL과 같은지 확인하고 새로고침
+        if (window.location.href === CONFIG.TARGET_URL) {
+            window.location.reload(true); // true를 전달하여 캐시를 무시하고 강제 새로고침
         } else {
-            autoClick();
+            window.location.href = CONFIG.TARGET_URL;
         }
     }
 }
@@ -113,7 +106,7 @@ async function initialize() {
     setInterval(checkAndExecute, 10);
 
     // 페이지 로드 이벤트 리스너 추가
-    document.addEventListener('DOMContentLoaded', handlePageLoad);
+    window.addEventListener('load', handlePageLoad);
 
     // 상태 표시 UI 추가
     const statusDiv = document.createElement('div');
